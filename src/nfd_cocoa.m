@@ -159,6 +159,13 @@ static void SetDefaultName(NSSavePanel* dialog, const nfdnchar_t* defaultName) {
     [dialog setNameFieldStringValue:defaultNameString];
 }
 
+static void SetDialogTitle(NSSavePanel* dialog, const nfdnchar_t* dialogTitle) {
+    if (!dialogTitle || !*dialogTitle) return;
+
+    NSString* dialogTitleString = [NSString stringWithUTF8String:dialogTitle];
+    [dialog setTitle:dialogTitleString];
+}
+
 static nfdresult_t CopyUtf8String(const char* utf8Str, nfdnchar_t** out) {
     // byte count, not char count
     size_t len = strlen(utf8Str);
@@ -206,7 +213,8 @@ void NFD_Quit(void) {
 nfdresult_t NFD_OpenDialogN(nfdnchar_t** outPath,
                             const nfdnfilteritem_t* filterList,
                             nfdfiltersize_t filterCount,
-                            const nfdnchar_t* defaultPath) {
+                            const nfdnchar_t* defaultPath,
+                            const nfdnchar_t* dialogTitle) {
     nfdresult_t result = NFD_CANCEL;
     @autoreleasepool {
         NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
@@ -219,6 +227,9 @@ nfdresult_t NFD_OpenDialogN(nfdnchar_t** outPath,
 
         // Set the starting directory
         SetDefaultPath(dialog, defaultPath);
+
+        // Set the dialog title
+        SetDialogTitle(dialog, dialogTitle);
 
         if ([dialog runModal] == NSModalResponseOK) {
             const NSURL* url = [dialog URL];
@@ -235,7 +246,8 @@ nfdresult_t NFD_OpenDialogN(nfdnchar_t** outPath,
 nfdresult_t NFD_OpenDialogMultipleN(const nfdpathset_t** outPaths,
                                     const nfdnfilteritem_t* filterList,
                                     nfdfiltersize_t filterCount,
-                                    const nfdnchar_t* defaultPath) {
+                                    const nfdnchar_t* defaultPath,
+                                    const nfdnchar_t* dialogTitle) {
     nfdresult_t result = NFD_CANCEL;
     @autoreleasepool {
         NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
@@ -248,6 +260,9 @@ nfdresult_t NFD_OpenDialogMultipleN(const nfdpathset_t** outPaths,
 
         // Set the starting directory
         SetDefaultPath(dialog, defaultPath);
+
+        // Set the dialog title
+        SetDialogTitle(dialog, dialogTitle);
 
         if ([dialog runModal] == NSModalResponseOK) {
             const NSArray* urls = [dialog URLs];
@@ -270,7 +285,8 @@ nfdresult_t NFD_SaveDialogN(nfdnchar_t** outPath,
                             const nfdnfilteritem_t* filterList,
                             nfdfiltersize_t filterCount,
                             const nfdnchar_t* defaultPath,
-                            const nfdnchar_t* defaultName) {
+                            const nfdnchar_t* defaultName,
+                            const nfdnchar_t* dialogTitle) {
     nfdresult_t result = NFD_CANCEL;
     @autoreleasepool {
         NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
@@ -290,6 +306,9 @@ nfdresult_t NFD_SaveDialogN(nfdnchar_t** outPath,
         // Set the default file name
         SetDefaultName(dialog, defaultName);
 
+        // Set the dialog title
+        SetDialogTitle(dialog, dialogTitle);
+
         if ([dialog runModal] == NSModalResponseOK) {
             const NSURL* url = [dialog URL];
             const char* utf8Path = [[url path] UTF8String];
@@ -302,7 +321,9 @@ nfdresult_t NFD_SaveDialogN(nfdnchar_t** outPath,
     return result;
 }
 
-nfdresult_t NFD_PickFolderN(nfdnchar_t** outPath, const nfdnchar_t* defaultPath) {
+nfdresult_t NFD_PickFolderN(nfdnchar_t** outPath,
+                            const nfdnchar_t* defaultPath,
+                            const nfdnchar_t* dialogTitle) {
     nfdresult_t result = NFD_CANCEL;
     @autoreleasepool {
         NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
@@ -315,6 +336,9 @@ nfdresult_t NFD_PickFolderN(nfdnchar_t** outPath, const nfdnchar_t* defaultPath)
 
         // Set the starting directory
         SetDefaultPath(dialog, defaultPath);
+
+        // Set the dialog title
+        SetDialogTitle(dialog, dialogTitle);
 
         if ([dialog runModal] == NSModalResponseOK) {
             const NSURL* url = [dialog URL];

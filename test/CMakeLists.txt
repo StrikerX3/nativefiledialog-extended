@@ -7,7 +7,8 @@ set(TEST_LIST
   test_opendialogmultiple_enum.c
   test_pickfolder.c
   test_pickfolder_cpp.cpp
-  test_savedialog.c)
+  test_savedialog.c
+  test_savedialog_cpp.cpp)
   
 foreach (TEST ${TEST_LIST})
   string(REPLACE "." "_" CLEAN_TEST_NAME ${TEST})

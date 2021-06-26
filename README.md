@@ -16,6 +16,7 @@ Features:
 - Automatically append file extension on platforms where users expect it
 - Support for setting a default folder path
 - Support for setting a default file name (e.g. `Untitled.c`)
+- Support for setting the dialog title
 - Consistent UTF-8 support on all platforms
 - Native character set (UTF-16 `wchar_t`) support on Windows
 - Initialization and de-initialization of platform library (e.g. COM (Windows) / GTK (Linux GTK) / D-Bus (Linux portal)) decoupled from dialog functions, so applications can choose when to initialize/de-initialize
@@ -35,13 +36,14 @@ Features added in Native File Dialog Extended:
 - Friendly names for filters
 - Automatically appending file extensions
 - Support for setting a default file name
+- Support for setting the dialog title
 - Native character set (UTF-16 `wchar_t`) support on Windows
 - xdg-desktop-portal support on Linux that opens the "native" file chooser (see "Usage" section below)
 - Initialization and de-initialization of platform library decoupled from file dialog functions
 - Modern CMake build system
 - Optional C++ wrapper with `unique_ptr` auto-freeing semantics and optional parameters
 
-There is also significant code refractoring, especially for the Windows implementation.
+There is also significant code refactoring, especially for the Windows implementation.
 
 The [wiki](https://github.com/btzy/nativefiledialog-extended/wiki) keeps track of known language bindings and known popular projects that depend on this library.
 
@@ -59,7 +61,7 @@ int main(void)
 
     nfdchar_t *outPath;
     nfdfilteritem_t filterItem[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
-    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL);
+    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL, NULL);
     if (result == NFD_OKAY)
     {
         puts("Success!");
